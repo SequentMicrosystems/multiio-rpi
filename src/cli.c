@@ -1,0 +1,41 @@
+#include "analog.h"
+#include "cli.h"
+#include "comm.h"
+#include "help.h"
+#include "misc.h"
+#include "multiio.h"
+#include "opto.h"
+#include "rtc.h"
+#include "wdt.h"
+
+const CliCmdType *gCmdArray[] = {
+	&CMD_HELP,
+	&CMD_VERSION,
+	&CMD_BOARD,
+	&CMD_UOUT_READ,
+	&CMD_IOUT_READ,
+	&CMD_RTC_SET,
+	&CMD_RTC_GET,
+	&CMD_WDT_RELOAD,
+	&CMD_WDT_SET_PERIOD,
+	&CMD_WDT_GET_PERIOD,
+	&CMD_WDT_SET_INIT_PERIOD,
+	&CMD_WDT_GET_INIT_PERIOD,
+	&CMD_WDT_SET_OFF_PERIOD,
+	&CMD_WDT_GET_OFF_PERIOD,
+	&CMD_WDT_GET_RESET_COUNT,
+	&CMD_WDT_CLR_RESET_COUNT,
+	&CMD_OPTO_READ,
+	&CMD_OPTO_EDGE_WRITE,
+	&CMD_OPTO_EDGE_READ,
+	&CMD_OPTO_CNT_READ,
+	&CMD_OPTO_CNT_RESET,
+	&CMD_OPTO_ENC_WRITE,
+	&CMD_OPTO_ENC_READ,
+	&CMD_OPTO_ENC_CNT_READ,
+	&CMD_SERVO_WRITE,
+	&CMD_SERVO_READ,
+	&CMD_SERVO_WRITE,
+	&CMD_LED_WRITE,
+	0
+};
