@@ -72,8 +72,7 @@ int doServoWrite(int argc, char *argv[]) {
         return OK;
 }
 
-const CliCmdType CMD_LED_WRITE =
-{
+const CliCmdType CMD_LED_WRITE = {
                 "ledwr",
         2,
         &doLedWrite,
