@@ -39,6 +39,7 @@ const CliCmdType *gCmdArray[] = {
 	&CMD_OPTO_ENC_CNT_READ,
 	&CMD_SERVO_READ,
 	&CMD_SERVO_WRITE,
+	&CMD_LED_READ,
 	&CMD_LED_WRITE,
 	0
 };
