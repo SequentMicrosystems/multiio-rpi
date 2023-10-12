@@ -69,7 +69,7 @@ enum {
 	I2C_MEM_ANALOG_TYPE, //0b0000ooii where o mean output channel and i mean input channel,  0 = voltage (default), 1 = current
 	I2C_MEM_V_IN,
 	I2C_MEM_I_IN = I2C_MEM_V_IN + U_IN_CH_NO * ANALOG_VAL_SIZE,
-	I2C_MEM_V_OUT = I2C_MEM_I_IN + U_IN_CH_NO * ANALOG_VAL_SIZE,
+	I2C_MEM_V_OUT = I2C_MEM_I_IN + I_IN_CH_NO * ANALOG_VAL_SIZE,
 	I2C_MEM_I_OUT = I2C_MEM_V_OUT + U_OUT_CH_NO * ANALOG_VAL_SIZE,
 
 	I2C_MEM_MOT_VAL = I2C_MEM_I_OUT + I_OUT_CH_NO * ANALOG_VAL_SIZE,

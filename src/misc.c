@@ -72,9 +72,8 @@ int doServoWrite(int argc, char *argv[]) {
         return OK;
 }
 
-const CliCmdType CMD_LED_WRITE =
-{
-                "ledwr",
+const CliCmdType CMD_LED_WRITE = {
+	"ledwr",
         2,
         &doLedWrite,
         "  ledwr            Set the state of general purpose LEDS on the card\n",
@@ -133,8 +132,10 @@ const CliCmdType CMD_BOARD = {
         2,
         &doBoard,
         "  board            Display the board status and firmware version number\n",
-        "  Usage:           megaind <stack> board\n",
-        "  Example:         megaind 0 board  Display vcc, temperature, firmware version \n"
+
+        "  Usage:           "PROGRAM_NAME" <stack> board\n",
+        "  Example:         "PROGRAM_NAME" 0 board  Display vcc, temperature, firmware version \n"
+
 };
 int doBoard(int argc, char *argv[]) {
         if(argc != 3) {

@@ -135,6 +135,25 @@ int optoCountReset(int dev, uint8_t ch) {
 	return OK;
 }
 
+int optoEncStateRead(int dev, uint8_t ch, uint8_t *val) {
+	if(badOptoChHalf(ch)) {
+		return ERROR;
+	}
+	if(NULL == val) {
+		return ERROR;
+	}
+	uint8_t buf[1];
+	if(OK != i2cMem8Read(dev, I2C_MEM_OPTO_ENC_ENABLE_ADD, buf, 1)) {
+		return ERROR;
+	}
+	if( (1 << (ch - 1)) & *buf) {
+		*val = 1;
+	} else {
+		*val = 0;
+	}
+	return OK;
+}
+
 int optoEncStateWrite(int dev, uint8_t ch, uint8_t val)
 {
 	if(badOptoCh(ch)) {
@@ -157,24 +176,6 @@ int optoEncStateWrite(int dev, uint8_t ch, uint8_t val)
 	return OK;
 }
 
-int optoEncStateRead(int dev, uint8_t ch, uint8_t *val) {
-	if(badOptoChHalf(ch)) {
-		return ERROR;
-	}
-	if(NULL == val) {
-		return ERROR;
-	}
-	uint8_t buf[1];
-	if(OK != i2cMem8Read(dev, I2C_MEM_OPTO_ENC_ENABLE_ADD, buf, 1)) {
-		return ERROR;
-	}
-	if( (1 << (ch - 1)) & *buf) {
-		*val = 1;
-	} else {
-		*val = 0;
-	}
-	return OK;
-}
 
 int optoEncGetCnt(int dev, uint8_t ch, int *val) {
 	if(badOptoChHalf(ch)) {
@@ -247,6 +248,36 @@ int doOptoRead(int argc, char *argv[]) {
 	return OK;
 }
 
+const CliCmdType CMD_OPTO_EDGE_READ = {
+        "optedgerd",
+        2,
+        &doOptoEdgeRead,
+        "  optedgerd        Read optocoupled counting edges 0 - none; 1 - rising; 2 - falling; 3 - both\n",
+        "  Usage:           "PROGRAM_NAME" <stack> optedgerd <pin>\n",
+        "  Example:         "PROGRAM_NAME" 0 optedgerd 2; Read counting edges of optocoupled channel #2 on Board #0\n"
+};
+int doOptoEdgeRead(int argc, char *argv[]) {
+	if(argc != 4) {
+		return ARG_CNT_ERR;
+	}
+	int dev = doBoardInit(atoi(argv[1]));
+	if(dev < 0) {
+		return ERROR;
+	}
+	uint8_t pin = (uint8_t)atoi(argv[3]);
+	if(badOptoCh(pin)) {
+		printf("Optocoupled ch number value out of range!\n");
+		return ARG_RANGE_ERROR;
+	}
+	uint8_t val;
+	if(OK != optoEdgeGet(dev, pin, &val)) {
+		printf("Fail to read!\n");
+		return ERROR;
+	}
+	printf("%d\n", val);
+	return OK;
+}
+
 const CliCmdType CMD_OPTO_EDGE_WRITE = {
         "optedgewr",
         2,
@@ -299,35 +330,6 @@ int doOptoEdgeWrite(int argc, char *argv[]) {
 	return OK;
 }
 
-const CliCmdType CMD_OPTO_EDGE_READ = {
-        "optedgerd",
-        2,
-        &doOptoEdgeRead,
-        "  optedgerd        Read optocoupled counting edges 0 - none; 1 - rising; 2 - falling; 3 - both\n",
-        "  Usage:           "PROGRAM_NAME" <stack> optedgerd <pin>\n",
-        "  Example:         "PROGRAM_NAME" 0 optedgerd 2; Read counting edges of optocoupled channel #2 on Board #0\n"
-};
-int doOptoEdgeRead(int argc, char *argv[]) {
-	if(argc != 4) {
-		return ARG_CNT_ERR;
-	}
-	int dev = doBoardInit(atoi(argv[1]));
-	if(dev < 0) {
-		return ERROR;
-	}
-	uint8_t pin = (uint8_t)atoi(argv[3]);
-	if(badOptoCh(pin)) {
-		printf("Optocoupled ch number value out of range!\n");
-		return ARG_RANGE_ERROR;
-	}
-	uint8_t val;
-	if(OK != optoEdgeGet(dev, pin, &val)) {
-		printf("Fail to read!\n");
-		return ERROR;
-	}
-	printf("%d\n", val);
-	return OK;
-}
 
 const CliCmdType CMD_OPTO_CNT_READ = {
         "optcntrd",
@@ -389,37 +391,6 @@ int doOptoCntReset(int argc, char *argv[]) {
 	return OK;
 }
 
-const CliCmdType CMD_OPTO_ENC_WRITE = {
-        "optencwr",
-        2,
-        &doOptoEncoderWrite,
-        "  optencwr         Enable / Disable optocoupled quadrature encoder, encoder 1 \n"
-	"                   connected to opto ch1 and 2, encoder 2 on ch3 and 4 ... \n",
-        "  Usage:           "PROGRAM_NAME" <stack> optencwr <channel> <0/1> \n",
-        "  Example:         "PROGRAM_NAME" 0 optencwr 2 1; Enable encoder on opto channel 3/4  on Board stack level 0\n"
-};
-int doOptoEncoderWrite(int argc, char *argv[]) {
-	if( (argc != 5)) {
-		return ARG_CNT_ERR;
-	}
-	int dev = doBoardInit(atoi(argv[1]));
-	if(dev <= 0) {
-		return ERROR;
-	}
-	int pin = 0;
-	pin = atoi(argv[3]);
-	if(badOptoChHalf(pin)) {
-		printf("Optocoupled encoder number value out of range [1..4]\n");
-		return ARG_RANGE_ERROR;
-	}
-	uint8_t state = atoi(argv[4]);
-	if(OK != optoEncStateWrite(dev, pin, state)) {
-		printf("Fail to write encoder State\n");
-		return ERROR;
-	}
-	return OK;
-}
-
 const CliCmdType CMD_OPTO_ENC_READ = {
         "optencrd",
         2,
@@ -430,12 +401,14 @@ const CliCmdType CMD_OPTO_ENC_READ = {
 };
 int doOptoEncoderRead(int argc, char *argv[]) {
 	if(argc != 4) {
+
 		return ARG_CNT_ERR;
 	}
 	int dev = doBoardInit(atoi(argv[1]));
 	if(dev <= 0) {
 		return ERROR;
 	}
+
 	uint8_t pin = atoi(argv[3]);
 	if(badOptoChHalf(pin)) {
 		printf("Optocoupled encoder number value out of range!\n");
@@ -447,6 +420,40 @@ int doOptoEncoderRead(int argc, char *argv[]) {
 		return ERROR;
 	}
 	printf("%d\n", val);
+	return OK;
+}
+
+const CliCmdType CMD_OPTO_ENC_WRITE = {
+        "optencwr",
+        2,
+        &doOptoEncoderWrite,
+        "  optencwr         Enable / Disable optocoupled quadrature encoder, encoder 1 \n"
+	"                   connected to opto ch1 and 2, encoder 2 on ch3 and 4 ... \n",
+        "  Usage:           "PROGRAM_NAME" <stack> optencwr <channel> <0/1> \n",
+        "  Example:         "PROGRAM_NAME" 0 optencwr 2 1; Enable encoder on opto channel 3/4  on Board stack level 0\n"
+};
+int doOptoEncoderWrite(int argc, char *argv[]) {
+	if( (argc != 5)) {
+
+		return ARG_CNT_ERR;
+	}
+	int dev = doBoardInit(atoi(argv[1]));
+	if(dev <= 0) {
+		return ERROR;
+	}
+
+	int pin = 0;
+	pin = atoi(argv[3]);
+	if(badOptoChHalf(pin)) {
+		printf("Optocoupled encoder number value out of range [1..4]\n");
+		return ARG_RANGE_ERROR;
+	}
+	uint8_t state = atoi(argv[4]);
+	if(OK != optoEncStateWrite(dev, pin, state)) {
+		printf("Fail to write encoder State\n");
+		return ERROR;
+	}
+
 	return OK;
 }
 
