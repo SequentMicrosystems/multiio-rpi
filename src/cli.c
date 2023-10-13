@@ -1,11 +1,12 @@
 #include "analog.h"
+#include "board.h"
 #include "cli.h"
 #include "comm.h"
 #include "help.h"
-#include "misc.h"
-#include "multiio.h"
+#include "led.h"
 #include "opto.h"
 #include "rtc.h"
+#include "servo.h"
 #include "wdt.h"
 
 const CliCmdType *gCmdArray[] = {

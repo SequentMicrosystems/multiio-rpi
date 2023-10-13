@@ -5,9 +5,8 @@
 #include <string.h>
 #include <math.h>
 
-#include "cli.h"
 #include "comm.h"
-#include "multiio.h"
+#include "data.h"
 #include "opto.h"
 
 // TODO: Add ranges in all error messages
@@ -15,8 +14,7 @@
 bool badOptoCh(uint8_t ch) {
 	return !(CH_NR_MIN <= ch && ch <= OPTO_CH_NR);
 }
-/* TODO: Ask Alex about meaning. */
-bool badOptoChHalf(uint8_t ch) {
+bool badOptoEncCh(uint8_t ch) {
 	return !(CH_NR_MIN <= ch && ch <= OPTO_CH_NR / 2);
 }
 
@@ -136,7 +134,7 @@ int optoCountReset(int dev, uint8_t ch) {
 }
 
 int optoEncStateRead(int dev, uint8_t ch, uint8_t *val) {
-	if(badOptoChHalf(ch)) {
+	if(badOptoEncCh(ch)) {
 		return ERROR;
 	}
 	if(NULL == val) {
@@ -178,7 +176,7 @@ int optoEncStateWrite(int dev, uint8_t ch, uint8_t val)
 
 
 int optoEncGetCnt(int dev, uint8_t ch, int *val) {
-	if(badOptoChHalf(ch)) {
+	if(badOptoEncCh(ch)) {
 		return ERROR;
 	}
 	if(NULL == val) {
@@ -193,7 +191,7 @@ int optoEncGetCnt(int dev, uint8_t ch, int *val) {
 }
 
 int optoEncRstCnt(int dev, uint8_t ch) {
-	if(badOptoChHalf(ch)) {
+	if(badOptoEncCh(ch)) {
 		return ERROR;
 	}
 	if(FAIL == i2cMem8Write(dev, I2C_MEM_OPTO_ENC_CNT_RST_ADD, &ch, 1)) {
@@ -401,16 +399,14 @@ const CliCmdType CMD_OPTO_ENC_READ = {
 };
 int doOptoEncoderRead(int argc, char *argv[]) {
 	if(argc != 4) {
-
 		return ARG_CNT_ERR;
 	}
 	int dev = doBoardInit(atoi(argv[1]));
 	if(dev <= 0) {
 		return ERROR;
 	}
-
 	uint8_t pin = atoi(argv[3]);
-	if(badOptoChHalf(pin)) {
+	if(badOptoEncCh(pin)) {
 		printf("Optocoupled encoder number value out of range!\n");
 		return ARG_RANGE_ERROR;
 	}
@@ -434,17 +430,15 @@ const CliCmdType CMD_OPTO_ENC_WRITE = {
 };
 int doOptoEncoderWrite(int argc, char *argv[]) {
 	if( (argc != 5)) {
-
 		return ARG_CNT_ERR;
 	}
 	int dev = doBoardInit(atoi(argv[1]));
 	if(dev <= 0) {
 		return ERROR;
 	}
-
 	int pin = 0;
 	pin = atoi(argv[3]);
-	if(badOptoChHalf(pin)) {
+	if(badOptoEncCh(pin)) {
 		printf("Optocoupled encoder number value out of range [1..4]\n");
 		return ARG_RANGE_ERROR;
 	}
@@ -453,7 +447,6 @@ int doOptoEncoderWrite(int argc, char *argv[]) {
 		printf("Fail to write encoder State\n");
 		return ERROR;
 	}
-
 	return OK;
 }
 
@@ -461,7 +454,7 @@ const CliCmdType CMD_OPTO_ENC_CNT_READ = {
         "optcntencrd",
         2,
         &doOptoEncoderCntRead,
-        "  optcntencrd      Read potocoupled encoder count for one channel\n",
+        "  optcntencrd      Read optocoupled encoder count for one channel\n",
         "  Usage:           "PROGRAM_NAME" <stack> optcntencrd <channel>\n",
         "  Example:         "PROGRAM_NAME" 0 optcntencrd 2; Read contor of opto encoder #2 on Board #0\n"
 };
@@ -474,7 +467,7 @@ int doOptoEncoderCntRead(int argc, char *argv[]) {
 		return ERROR;
 	}
 	uint8_t pin = atoi(argv[3]);
-	if(badOptoChHalf(pin)) {
+	if(badOptoEncCh(pin)) {
 		printf("Optocoupled encoder number value out of range!\n");
 		return ARG_RANGE_ERROR;
 	}
@@ -505,7 +498,7 @@ int doOptoEncoderCntReset(int argc, char *argv[]) {
 	}
 	uint8_t pin = 0;
 	pin = atoi(argv[3]);
-	if(badOptoChHalf(pin)) {
+	if(badOptoEncCh(pin)) {
 		printf("Optocoupled encoder number value out of range!\n");
 		return ARG_RANGE_ERROR;
 	}

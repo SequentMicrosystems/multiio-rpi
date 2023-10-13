@@ -2,7 +2,7 @@
 #include <string.h>
 
 #include "help.h"
-#include "multiio.h"
+#include "data.h"
 
 int generalHelp(void) {
 	printf("Usage: "PROGRAM_NAME" [options] [...]\n");

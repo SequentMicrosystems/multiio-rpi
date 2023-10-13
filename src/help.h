@@ -3,13 +3,14 @@
 
 #include "cli.h"
 
+extern const CliCmdType CMD_HELP;
+extern const CliCmdType CMD_VERSION;
+
 int generalHelp(void);
 int findCmdByName(char *name);
 int findCmd(int argc, char *argv[]);
 int doHelp(int argc, char *argv[]);
-extern const CliCmdType CMD_HELP;
 int doVersion(int argc, char *argv[]);
-extern const CliCmdType CMD_VERSION;
 
 #endif /* HELP_H */
 

@@ -5,7 +5,7 @@
 
 #include "analog.h"
 #include "comm.h"
-#include "multiio.h"
+#include "data.h"
 
 int val16Get(int dev, int baseAddr, int ch, float scale, float* val) {
 	int addr = baseAddr + ANALOG_VAL_SIZE * (ch - 1);

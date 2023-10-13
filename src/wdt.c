@@ -4,9 +4,8 @@
 #include <string.h>
 #include <math.h>
 
-#include "cli.h"
 #include "comm.h"
-#include "multiio.h"
+#include "data.h"
 #include "wdt.h"
 
 const CliCmdType CMD_WDT_RELOAD = {
@@ -178,6 +177,7 @@ int doWdtGetOffPeriod(int argc, char *argv[])
 	uint32_t period;
 	memcpy(&period, buf, 4);
 	printf("%d\n", (int)period);
+
 	return OK;
 }
 
@@ -224,8 +224,7 @@ int doWdtGetResetCount(int argc, char *argv[]) {
 	if(argc != 3) {
 		return ARG_CNT_ERR;
 	}
-	int dev = 0;
-	dev = doBoardInit(atoi(argv[1]));
+	int dev = doBoardInit(atoi(argv[1]));
 	if (dev < 0) {
 		return ERROR;
 	}
