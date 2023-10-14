@@ -12,10 +12,10 @@
 // TODO: Add ranges in all error messages
 
 bool badOptoCh(uint8_t ch) {
-	return !(CH_NR_MIN <= ch && ch <= OPTO_CH_NR);
+	return !(MIN_CH_NO <= ch && ch <= OPTO_CH_NO);
 }
 bool badOptoEncCh(uint8_t ch) {
-	return !(CH_NR_MIN <= ch && ch <= OPTO_CH_NR / 2);
+	return !(MIN_CH_NO <= ch && ch <= OPTO_CH_NO / 2);
 }
 
 int optoChGet(int dev, uint8_t ch, StateType *state) {
@@ -44,15 +44,14 @@ int optoGet(int dev, int *val) {
 	if(NULL == val) {
 		return ERROR;
 	}
-	if(FAIL == i2cMem8Read(dev, I2C_MEM_OPTO, buff, 1)) {
+	if(OK != i2cMem8Read(dev, I2C_MEM_OPTO, buff, 1)) {
 		return ERROR;
 	}
 	*val = buff[0];
 	return OK;
 }
 
-int optoEdgeGet(int dev, uint8_t ch, uint8_t *val)
-{
+int optoEdgeGet(int dev, uint8_t ch, uint8_t *val) {
 	if(NULL == val) {
 		return ERROR;
 	}
@@ -76,8 +75,7 @@ int optoEdgeGet(int dev, uint8_t ch, uint8_t *val)
 	return OK;
 }
 
-int optoEdgeSet(int dev, uint8_t ch, uint8_t val)
-{
+int optoEdgeSet(int dev, uint8_t ch, uint8_t val) {
 	if(badOptoCh(ch)) {
 		return ERROR;
 	}
@@ -102,7 +100,7 @@ int optoEdgeSet(int dev, uint8_t ch, uint8_t val)
 	}
 	buf[0] = rising;
 	buf[1] = falling;
-	if(FAIL == i2cMem8Write(dev, I2C_MEM_OPTO_IT_RISING_ADD, buf, 2)) {
+	if(OK != i2cMem8Write(dev, I2C_MEM_OPTO_IT_RISING_ADD, buf, 2)) {
 		return ERROR;
 	}
 	return OK;
@@ -116,7 +114,7 @@ int optoCountGet(int dev, uint8_t ch, uint32_t *val) {
 		return ERROR;
 	}
 	uint8_t buf[4];
-	if(OK != i2cMem8Read(dev, I2C_MEM_OPTO_EDGE_COUNT_ADD + COUNTER_SIZE * (ch - 1), buf, 4)) {
+	if(OK != i2cMem8Read(dev, I2C_MEM_OPTO_EDGE_COUNT_ADD + COUNTER_SIZE * (ch - 1), buf, COUNTER_SIZE)) {
 		return ERROR;
 	}
 	memcpy(val, buf, 4);
@@ -152,13 +150,12 @@ int optoEncStateRead(int dev, uint8_t ch, uint8_t *val) {
 	return OK;
 }
 
-int optoEncStateWrite(int dev, uint8_t ch, uint8_t val)
-{
+int optoEncStateWrite(int dev, uint8_t ch, uint8_t val) {
 	if(badOptoCh(ch)) {
 		return ERROR;
 	}
 	uint8_t buf[1];
-	if(FAIL == i2cMem8Read(dev, I2C_MEM_OPTO_ENC_ENABLE_ADD, buf, 1)) {
+	if(OK != i2cMem8Read(dev, I2C_MEM_OPTO_ENC_ENABLE_ADD, buf, 1)) {
 		return ERROR;
 	}
 	uint32_t mask = 1 << (ch - 1);
@@ -168,12 +165,11 @@ int optoEncStateWrite(int dev, uint8_t ch, uint8_t val)
 	else {
 		*buf &= ~mask;
 	}
-	if(FAIL == i2cMem8Write(dev, I2C_MEM_OPTO_ENC_ENABLE_ADD, buf, 1)) {
+	if(OK != i2cMem8Write(dev, I2C_MEM_OPTO_ENC_ENABLE_ADD, buf, 1)) {
 		return ERROR;
 	}
 	return OK;
 }
-
 
 int optoEncGetCnt(int dev, uint8_t ch, int *val) {
 	if(badOptoEncCh(ch)) {
@@ -183,10 +179,10 @@ int optoEncGetCnt(int dev, uint8_t ch, int *val) {
 		return ERROR;
 	}
 	uint8_t buf[4];
-	if(OK != i2cMem8Read(dev, I2C_MEM_OPTO_ENC_COUNT_ADD + COUNTER_SIZE * (ch - 1), buf, 4)) {
+	if(OK != i2cMem8Read(dev, I2C_MEM_OPTO_ENC_COUNT_ADD + COUNTER_SIZE * (ch - 1), buf, COUNTER_SIZE)) {
 		return ERROR;
 	}
-	memcpy(&val, buf, 4);
+	memcpy(val, buf, 4);
 	return OK;
 }
 
@@ -194,7 +190,7 @@ int optoEncRstCnt(int dev, uint8_t ch) {
 	if(badOptoEncCh(ch)) {
 		return ERROR;
 	}
-	if(FAIL == i2cMem8Write(dev, I2C_MEM_OPTO_ENC_CNT_RST_ADD, &ch, 1)) {
+	if(OK != i2cMem8Write(dev, I2C_MEM_OPTO_ENC_CNT_RST_ADD, &ch, 1)) {
 		return ERROR;
 	}
 	return OK;

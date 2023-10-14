@@ -1,9 +1,11 @@
 #include <math.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include "analog.h"
+#include "calib.h"
 #include "comm.h"
 #include "data.h"
 
@@ -31,6 +33,37 @@ int val16Set(int dev, int baseAddr, int ch, float scale, float val) {
 	return OK;
 }
 
+/* bad channel check functoin {{{ */
+bool badUInCh(int ch) {
+	if(!(MIN_CH_NO <= ch && ch <= U_IN_CH_NO)) {
+		printf("0-10V input channel out of range![%d..%d]\n", MIN_CH_NO, U_IN_CH_NO);
+		return true;
+	}
+	return false;
+}
+bool badUOutCh(int ch) {
+	if(!(MIN_CH_NO <= ch && ch <= U_OUT_CH_NO)) {
+		printf("0-10V output channel out of range![%d..%d]\n", MIN_CH_NO, U_OUT_CH_NO);
+		return true;
+	}
+	return false;
+}
+bool badIInCh(int ch) {
+	if(!(MIN_CH_NO <= ch && ch <= I_IN_CH_NO)) {
+		printf("0-10V input channel out of range![%d..%d]\n", MIN_CH_NO, I_IN_CH_NO);
+		return true;
+	}
+	return false;
+}
+bool badIOutCh(int ch) {
+	if(!(MIN_CH_NO <= ch && ch <= I_OUT_CH_NO)) {
+		printf("4-20mA input channel out of range![%d..%d]\n", MIN_CH_NO, I_OUT_CH_NO);
+		return true;
+	}
+	return false;
+}
+/* }}} */
+
 const CliCmdType CMD_UIN_READ = {/*{{{*/
 	"uinrd",
 	2,
@@ -49,17 +82,110 @@ int doUInRead(int argc, char *argv[]) {
 		return ERROR;
 	}
 	int ch = atoi(argv[3]);
-	if(!(CH_NR_MIN <= ch && ch <= U_OUT_CH_NO)) {
-		printf("0-10V input channel out of range!\n");
+	if(badUInCh(ch)) {
 		return ARG_RANGE_ERROR;
 	}
 	float val = 0;
-	if(OK != val16Get(dev, I2C_MEM_V_OUT, ch, VOLT_TO_MILIVOLT, &val)) {
+	if(OK != val16Get(dev, I2C_MEM_U_OUT, ch, VOLT_TO_MILIVOLT, &val)) {
 		return ERROR;
 	}
 	printf("%0.3f\n", val);
 	return OK;
 }/*}}}*/
+const CliCmdType CMD_UIN_CAL = {/*{{{*/
+	"uincal",
+	2,
+	&doUInCal,
+	"  uincal           Calibrate 0-10V input channel, the calibration must be done in 2 points at min 5V apart\n",
+	"  Usage 1:         "PROGRAM_NAME" <id> uincal <channel> <value(V)>\n"
+	"  Usage 2:         "PROGRAM_NAME" <id> uincal <channel> reset\n",
+	"  Example:         "PROGRAM_NAME" 0 uincal 1 0.5; Calibrate the 0-10V input channel #1 on board #0 at 0.5V\n"
+};
+int doUInCal(int argc, char *argv[]) {
+	if(argc != 5) {
+		return ARG_CNT_ERR;
+	}
+	int ch = atoi(argv[3]);
+	if(badUInCh(ch)) {
+		return ARG_RANGE_ERROR;
+	}
+	int dev = doBoardInit(atoi(argv[1]));
+	if(dev < 0) {
+		return ERROR;
+	}
+	if(strcasecmp(argv[4], "reset")) {
+		if(OK != calibReset(dev, CALIB_U_IN_CH1 + (ch - 1))) {
+			return ERROR;
+		}
+		return OK;
+	}
+	float value = atof(argv[4]);
+	if(OK != calibSet(dev, CALIB_U_IN_CH1 + (ch - 1), value)) {
+		return ERROR;
+	}
+	return OK;
+}/*}}}*/
+const CliCmdType CMD_IIN_READ = {/*{{{*/
+	"iinrd",
+	2,
+	&doIInRead,
+	"  iinrd            Read 4-20mA input amperage value(mA)\n",
+	"  Usage:           "PROGRAM_NAME" <id> iinrd <channel>\n",
+	"  Example:         "PROGRAM_NAME" 0 iinrd 2 #Read amperage on 4-20mA input channel #2 on board #0\n",
+};
+int doIInRead(int argc, char *argv[]) {
+	if(argc != 4) {
+		return ARG_CNT_ERR;
+	}
+	int id = atoi(argv[1]);
+	int dev = doBoardInit(id);
+	if(dev < 0) {
+		return ERROR;
+	}
+	int ch = atoi(argv[3]);
+	if(badIInCh(ch)) {
+		return ARG_RANGE_ERROR;
+	}
+	float val = 0;
+	if(OK != val16Get(dev, I2C_MEM_I_OUT, ch, MILIAMPER_TO_MICROAMPER, &val)) {
+		return ERROR;
+	}
+	printf("%0.3f\n", val);
+	return OK;
+}/*}}}*/
+const CliCmdType CMD_IIN_CAL = {/*{{{*/
+	"iincal",
+	2,
+	&doIInCal,
+	"  iincal           Calibrate 4-20mA input channel, the calibration must be done in 2 points at min 10mA apart\n",
+	"  Usage 1:         "PROGRAM_NAME" <id> iincal <channel> <value(A)>\n"
+	"  Usage 2:         "PROGRAM_NAME" <id> iincal <channel> reset\n",
+	"  Example:         "PROGRAM_NAME" 0 iincal 1 0.5; Calibrate the 4-20mA input channel #1 on board #0 at 0.5V\n"
+};
+int doIInCal(int argc, char *argv[]) {
+	if(argc != 5) {
+		return ARG_CNT_ERR;
+	}
+	int ch = atoi(argv[3]);
+	if(badIInCh(ch)) {
+		return ARG_RANGE_ERROR;
+	}
+	int dev = doBoardInit(atoi(argv[1]));
+	if(dev < 0) {
+		return ERROR;
+	}
+	float value = atof(argv[4]);
+	if(strcasecmp(argv[4], "reset")) {
+		if(OK != calibReset(dev, CALIB_I_IN_CH1 + (ch - 1))) {
+			return ERROR;
+		}
+	}
+	if(OK != calibSet(dev, CALIB_I_IN_CH1 + (ch - 1), value)) {
+		return ERROR;
+	}
+	return OK;
+}/*}}}*/
+
 const CliCmdType CMD_UOUT_READ = {/*{{{*/
 	"uoutrd",
 	2,
@@ -78,12 +204,11 @@ int doUOutRead(int argc, char *argv[]) {
 		return ERROR;
 	}
 	int ch = atoi(argv[3]);
-	if(!(CH_NR_MIN <= ch && ch <= U_OUT_CH_NO)) {
-		printf("0-10V output channel out of range!\n");
+	if(badUOutCh(ch)) {
 		return ARG_RANGE_ERROR;
 	}
 	float val = 0;
-	if(OK != val16Get(dev, I2C_MEM_V_OUT, ch, VOLT_TO_MILIVOLT, &val)) {
+	if(OK != val16Get(dev, I2C_MEM_U_OUT, ch, VOLT_TO_MILIVOLT, &val)) {
 		return ERROR;
 	}
 	printf("%0.3f\n", val);
@@ -107,8 +232,7 @@ int doUOutWrite(int argc, char *argv[]) {
 		return ERROR;
 	}
 	int ch = atoi(argv[3]);
-	if(!(CH_NR_MIN <= ch && ch <= U_OUT_CH_NO)) {
-		printf("0-10V output channel out of range!\n");
+	if(badUOutCh(ch)) {
 		return ARG_RANGE_ERROR;
 	}
 	float val = atof(argv[4]);
@@ -116,40 +240,42 @@ int doUOutWrite(int argc, char *argv[]) {
 		printf("Invalid voltage value, must be 0..10\n");
 		return ARG_RANGE_ERROR;
 	}
-	if(OK != val16Set(dev, I2C_MEM_V_OUT, ch, VOLT_TO_MILIVOLT, val)) {
+	if(OK != val16Set(dev, I2C_MEM_U_OUT, ch, VOLT_TO_MILIVOLT, val)) {
 		return ERROR;
 	}
 	printf("done\n");
 	return OK;
 }/*}}}*/
-
-const CliCmdType CMD_IIN_READ = {/*{{{*/
-	"iinrd",
+const CliCmdType CMD_UOUT_CAL = {/*{{{*/
+	"uoutcal",
 	2,
-	&doIInRead,
-	"  iinrd            Read 4-20mA input amperage value(mA)\n",
-	"  Usage:           "PROGRAM_NAME" <id> iinrd <channel>\n",
-	"  Example:         "PROGRAM_NAME" 0 iinrd 2 #Read amperage on 4-20mA input channel #2 on board #0\n",
+	&doUOutCal,
+	"  uoutcal          Calibrate 0-10V output channel, the calibration must be done in 2 points at min 5V apart\n",
+	"  Usage 1:         "PROGRAM_NAME" <id> uoutcal <channel> <value(V)>\n"
+	"  Usage 2:         "PROGRAM_NAME" <id> uoutcal <channel> reset\n",
+	"  Example:         "PROGRAM_NAME" 0 uoutcal 1 0.5; Calibrate the 0-10V output channel #1 on board #0 at 0.5V\n"
 };
-int doIInRead(int argc, char *argv[]) {
-	if(argc != 4) {
+int doUOutCal(int argc, char *argv[]) {
+	if(argc != 5) {
 		return ARG_CNT_ERR;
 	}
-	int id = atoi(argv[1]);
-	int dev = doBoardInit(id);
+	int ch = atoi(argv[3]);
+	if(badUOutCh(ch)) {
+		return ARG_RANGE_ERROR;
+	}
+	int dev = doBoardInit(atoi(argv[1]));
 	if(dev < 0) {
 		return ERROR;
 	}
-	int ch = atoi(argv[3]);
-	if(!(CH_NR_MIN <= ch && ch <= I_OUT_CH_NO)) {
-		printf("4-20mA input channel out of range!\n");
-		return ARG_RANGE_ERROR;
+	if(strcasecmp(argv[4], "reset")) {
+		if(OK != calibReset(dev, CALIB_U_OUT_CH1 + (ch - 1))) {
+			return ERROR;
+		}
 	}
-	float val = 0;
-	if(OK != val16Get(dev, I2C_MEM_I_OUT, ch, MILIAMPER_TO_MICROAMPER, &val)) {
+	float value = atof(argv[4]);
+	if(OK != calibSet(dev, CALIB_U_OUT_CH1 + (ch - 1), value)) {
 		return ERROR;
 	}
-	printf("%0.3f\n", val);
 	return OK;
 }/*}}}*/
 const CliCmdType CMD_IOUT_READ = {/*{{{*/
@@ -170,8 +296,7 @@ int doIOutRead(int argc, char *argv[]) {
 		return ERROR;
 	}
 	int ch = atoi(argv[3]);
-	if(!(CH_NR_MIN <= ch && ch <= I_OUT_CH_NO)) {
-		printf("4-20mA output channel out of range!\n");
+	if(badIOutCh(ch)) {
 		return ARG_RANGE_ERROR;
 	}
 	float val = 0;
@@ -199,8 +324,7 @@ int doIOutWrite(int argc, char *argv[]) {
 		return ERROR;
 	}
 	int ch = atoi(argv[3]);
-	if(!(CH_NR_MIN <= ch && ch <= U_OUT_CH_NO)) {
-		printf("4-20mA output channel out of range!\n");
+	if(badIOutCh(ch)) {
 		return ARG_RANGE_ERROR;
 	}
 	float val = atof(argv[4]);
@@ -212,6 +336,38 @@ int doIOutWrite(int argc, char *argv[]) {
 		return ERROR;
 	}
 	printf("done\n");
+	return OK;
+}/*}}}*/
+const CliCmdType CMD_IOUT_CAL = {/*{{{*/
+	"ioutcal",
+	2,
+	&doIOutCal,
+	"  ioutcal          Calibrate 4-20mA output channel, the calibration must be done in 2 points at min 10mA apart\n",
+	"  Usage 1:         "PROGRAM_NAME" <id> ioutcal <channel> <value(A)>\n"
+	"  Usage 2:         "PROGRAM_NAME" <id> ioutcal <channel> reset\n",
+	"  Example:         "PROGRAM_NAME" 0 ioutcal 1 0.5; Calibrate the 4-20mA output channel #1 on board #0 at 0.5V\n"
+};
+int doIOutCal(int argc, char *argv[]) {
+	if(argc != 5) {
+		return ARG_CNT_ERR;
+	}
+	int ch = atoi(argv[3]);
+	if(badIInCh(ch)) {
+		return ARG_RANGE_ERROR;
+	}
+	int dev = doBoardInit(atoi(argv[1]));
+	if(dev < 0) {
+		return ERROR;
+	}
+	float value = atof(argv[4]);
+	if(strcasecmp(argv[4], "reset")) {
+		if(OK != calibReset(dev, CALIB_I_OUT_CH1 + (ch - 1))) {
+			return ERROR;
+		}
+	}
+	if(OK != calibSet(dev, CALIB_I_OUT_CH1 + (ch - 1), value)) {
+		return ERROR;
+	}
 	return OK;
 }/*}}}*/
 

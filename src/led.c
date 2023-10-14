@@ -10,7 +10,7 @@ const CliCmdType CMD_LED_READ = {
         2,
         &doLedRead,
         "  ledrd            Display the state of general purpose LEDS on the card\n",
-        "  Usage 1:         "PROGRAM_NAME" <id> ledrd <led[1..6]>\n"
+        "  Usage 1:         "PROGRAM_NAME" <id> ledrd <led[1.."STR(LED_NO)"]>\n"
         "  Usage 2:         "PROGRAM_NAME" <id> ledrd\n",
         "  Example:         "PROGRAM_NAME" 0 ledrd 2  Get the state of #2 on board #0\n"
 };
@@ -62,8 +62,8 @@ const CliCmdType CMD_LED_WRITE = {
         2,
         &doLedWrite,
         "  ledwr            Set the state of general purpose LEDS on the card\n",
-        "  Usage 1:         "PROGRAM_NAME" <id> ledwr <led[1..6]> <state(0/1)>\n"
-        "  Usage 2:         "PROGRAM_NAME" <id> ledwr <value[0..63]>\n",
+        "  Usage 1:         "PROGRAM_NAME" <id> ledwr <led[1.."STR(LED_NO)"]> <state(0/1)>\n"
+        "  Usage 2:         "PROGRAM_NAME" <id> ledwr <mask[0.."STR(MASK(LED_NO))"]>\n",
         "  Example:         "PROGRAM_NAME" 0 ledwr 2 1  Turn ON the LED #2 on board #0\n"
 };
 int doLedWrite(int argc, char *argv[]) {
@@ -75,26 +75,24 @@ int doLedWrite(int argc, char *argv[]) {
                 return ERROR;
         }
         if(argc == 4) {
-                int state = 0;
-                state = atoi(argv[3]);
-                if(!(0 <= state && state <= (1 << LED_NO))) {
+                int mask = atoi(argv[3]);
+                if(!(0 <= mask && mask <= (1 << LED_NO))) {
                         return ARG_RANGE_ERROR;
                 }
                 uint8_t buf[1];
-                buf[0] = 0xff & state;
+                buf[0] = 0xff & mask;
                 if(OK != i2cMem8Write(dev, I2C_MEM_LEDS, buf, 1)) {
                         printf("Fail to write!\n");
                         return ERROR;
                 }
         }
         else if(argc == 5) {
-                int state = 0;
                 int led = atoi(argv[3]);
                 if(!(1 <= led && led <= LED_NO)) {
 			printf("Led number out of range");
                         return ARG_RANGE_ERROR;
                 }
-                state = atoi(argv[4]);
+                int state = atoi(argv[4]);
                 uint8_t buf[1];
                 buf[0] = 0xff & led;
                 if(state > 0) {
