@@ -10,7 +10,7 @@ const CliCmdType CMD_LED_READ = {
         2,
         &doLedRead,
         "  ledrd            Display the state of general purpose LEDS on the card\n",
-        "  Usage 1:         "PROGRAM_NAME" <id> ledrd <led[1.."STR(LED_NO)"]>\n"
+        "  Usage 1:         "PROGRAM_NAME" <id> ledrd <led[1.."STR(LED_CH_NO)"]>\n"
         "  Usage 2:         "PROGRAM_NAME" <id> ledrd\n",
         "  Example:         "PROGRAM_NAME" 0 ledrd 2  Get the state of #2 on board #0\n"
 };
@@ -28,7 +28,7 @@ int doLedRead(int argc, char *argv[]) {
                         printf("Fail to read!\n");
                         return ERROR;
                 }
-		for(int led = 1; led <= LED_NO; ++led) {
+		for(int led = 1; led <= LED_CH_NO; ++led) {
 			if(buf[0] & (1 << (led - 1))) {
 				printf("1 ");
 			} else {
@@ -44,7 +44,7 @@ int doLedRead(int argc, char *argv[]) {
 			return ERROR;
 		}
 		int led = atoi(argv[3]);
-                if(!(1 <= led && led <= LED_NO)) {
+                if(!(1 <= led && led <= LED_CH_NO)) {
 			printf("Led number out of range");
                         return ARG_RANGE_ERROR;
                 }
@@ -62,8 +62,8 @@ const CliCmdType CMD_LED_WRITE = {
         2,
         &doLedWrite,
         "  ledwr            Set the state of general purpose LEDS on the card\n",
-        "  Usage 1:         "PROGRAM_NAME" <id> ledwr <led[1.."STR(LED_NO)"]> <state(0/1)>\n"
-        "  Usage 2:         "PROGRAM_NAME" <id> ledwr <mask[0.."STR(MASK(LED_NO))"]>\n",
+        "  Usage 1:         "PROGRAM_NAME" <id> ledwr <led[1.."STR(LED_CH_NO)"]> <state(0/1)>\n"
+        "  Usage 2:         "PROGRAM_NAME" <id> ledwr <mask[0.."STR(MASK(LED_CH_NO))"]>\n",
         "  Example:         "PROGRAM_NAME" 0 ledwr 2 1  Turn ON the LED #2 on board #0\n"
 };
 int doLedWrite(int argc, char *argv[]) {
@@ -76,7 +76,7 @@ int doLedWrite(int argc, char *argv[]) {
         }
         if(argc == 4) {
                 int mask = atoi(argv[3]);
-                if(!(0 <= mask && mask <= (1 << LED_NO))) {
+                if(!(0 <= mask && mask <= (1 << LED_CH_NO))) {
                         return ARG_RANGE_ERROR;
                 }
                 uint8_t buf[1];
@@ -88,7 +88,7 @@ int doLedWrite(int argc, char *argv[]) {
         }
         else if(argc == 5) {
                 int led = atoi(argv[3]);
-                if(!(1 <= led && led <= LED_NO)) {
+                if(!(1 <= led && led <= LED_CH_NO)) {
 			printf("Led number out of range");
                         return ARG_RANGE_ERROR;
                 }

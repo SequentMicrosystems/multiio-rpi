@@ -12,6 +12,7 @@
 #include "rtd.h"
 #include "servo.h"
 #include "wdt.h"
+#include "button.h"
 
 const CliCmdType *gCmdArray[] = {
 	&CMD_HELP,
@@ -49,6 +50,7 @@ const CliCmdType *gCmdArray[] = {
 	&CMD_OPTO_ENC_READ,
 	&CMD_OPTO_ENC_WRITE,
 	&CMD_OPTO_ENC_CNT_READ,
+	&CMD_OPTO_ENC_CNT_RESET,
 	&CMD_SERVO_READ,
 	&CMD_SERVO_WRITE,
 	&CMD_MOTOR_READ,
@@ -57,5 +59,7 @@ const CliCmdType *gCmdArray[] = {
 	&CMD_DOD_WRITE,
 	&CMD_LED_READ,
 	&CMD_LED_WRITE,
+	&CMD_BUTTON_READ,
+	&CMD_BUTTON_LATCH_READ,
 	0
 };

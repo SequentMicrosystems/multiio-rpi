@@ -91,7 +91,7 @@ int doDODWrite(int argc, char *argv[]) {
         else if(argc == 5) {
                 int state = 0;
                 int rel = atoi(argv[3]);
-                if(!(1 <= rel && rel <= LED_NO)) {
+                if(!(1 <= rel && rel <= LED_CH_NO)) {
 			printf("Led number out of range");
                         return ARG_RANGE_ERROR;
                 }

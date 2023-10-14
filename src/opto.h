@@ -23,10 +23,4 @@ int doOptoEncoderRead(int argc, char *argv[]);
 int doOptoEncoderCntRead(int argc, char *argv[]);
 int doOptoEncoderCntReset(int argc, char *argv[]);
 
-typedef enum {
-	ON,
-	OFF,
-	STATE_COUNT
-} StateType;
-
 #endif /* OPTO_H */
