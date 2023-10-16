@@ -30,6 +30,7 @@ $(TARGET): $(OBJ)
 	$Q $(CC) -o $@ $(OBJ) $(LDFLAGS) $(LIBS)
 
 build/%.o : src/%.c
+	$Q mkdir -p $(@D)
 	$Q echo "[Compile] $< -> $@"
 	$Q $(CC) -c $(CFLAGS) $< -o $@
 
