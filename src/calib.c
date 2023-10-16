@@ -13,7 +13,7 @@ int calibSet(int dev, int channel, float value) {
 		0,
 		0,
 		0xff & channel,
-		CALIBRATION_KEY
+		CALIBRATION_KEY,
 	};
 	memcpy(buf, &value, 4);
 	if(OK != i2cMem8Write(dev, I2C_MEM_CALIB_VALUE, buf, 6)) {
@@ -24,15 +24,11 @@ int calibSet(int dev, int channel, float value) {
 }
 
 int calibReset(int dev, int channel) {
-	uint8_t buf[6] = {
-		0,
-		0,
-		0,
-		0,
+	uint8_t buf[2] = {
 		0xff & channel,
-		RESET_CALIBRATION_KEY
+		RESET_CALIBRATION_KEY,
 	};
-	if(OK != i2cMem8Write(dev, I2C_MEM_CALIB_VALUE, buf, 6)) {
+	if(OK != i2cMem8Write(dev, I2C_MEM_CALIB_CHANNEL, buf, 2)) {
 		printf("Failed to reset calibration\n");
 		return ERROR;
 	}

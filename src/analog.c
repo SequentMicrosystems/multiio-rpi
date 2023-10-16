@@ -86,7 +86,7 @@ int doUInRead(int argc, char *argv[]) {
 		return ARG_RANGE_ERROR;
 	}
 	float val = 0;
-	if(OK != val16Get(dev, I2C_MEM_U_OUT, ch, VOLT_TO_MILIVOLT, &val)) {
+	if(OK != val16Get(dev, I2C_MEM_U_IN, ch, VOLT_TO_MILIVOLT, &val)) {
 		return ERROR;
 	}
 	printf("%0.3f\n", val);
@@ -113,7 +113,7 @@ int doUInCal(int argc, char *argv[]) {
 	if(dev < 0) {
 		return ERROR;
 	}
-	if(strcasecmp(argv[4], "reset")) {
+	if(strcasecmp(argv[4], "reset") == 0) {
 		if(OK != calibReset(dev, CALIB_U_IN_CH1 + (ch - 1))) {
 			return ERROR;
 		}
@@ -147,7 +147,7 @@ int doIInRead(int argc, char *argv[]) {
 		return ARG_RANGE_ERROR;
 	}
 	float val = 0;
-	if(OK != val16Get(dev, I2C_MEM_I_OUT, ch, MILIAMPER_TO_MICROAMPER, &val)) {
+	if(OK != val16Get(dev, I2C_MEM_I_IN, ch, MILIAMPER_TO_MICROAMPER, &val)) {
 		return ERROR;
 	}
 	printf("%0.3f\n", val);
@@ -175,10 +175,11 @@ int doIInCal(int argc, char *argv[]) {
 		return ERROR;
 	}
 	float value = atof(argv[4]);
-	if(strcasecmp(argv[4], "reset")) {
+	if(strcasecmp(argv[4], "reset") == 0) {
 		if(OK != calibReset(dev, CALIB_I_IN_CH1 + (ch - 1))) {
 			return ERROR;
 		}
+		return OK;
 	}
 	if(OK != calibSet(dev, CALIB_I_IN_CH1 + (ch - 1), value)) {
 		return ERROR;
@@ -243,7 +244,6 @@ int doUOutWrite(int argc, char *argv[]) {
 	if(OK != val16Set(dev, I2C_MEM_U_OUT, ch, VOLT_TO_MILIVOLT, val)) {
 		return ERROR;
 	}
-	printf("done\n");
 	return OK;
 }/*}}}*/
 const CliCmdType CMD_UOUT_CAL = {/*{{{*/
@@ -267,10 +267,11 @@ int doUOutCal(int argc, char *argv[]) {
 	if(dev < 0) {
 		return ERROR;
 	}
-	if(strcasecmp(argv[4], "reset")) {
+	if(strcasecmp(argv[4], "reset") == 0) {
 		if(OK != calibReset(dev, CALIB_U_OUT_CH1 + (ch - 1))) {
 			return ERROR;
 		}
+		return OK;
 	}
 	float value = atof(argv[4]);
 	if(OK != calibSet(dev, CALIB_U_OUT_CH1 + (ch - 1), value)) {
@@ -335,7 +336,6 @@ int doIOutWrite(int argc, char *argv[]) {
 	if(OK != val16Set(dev, I2C_MEM_I_OUT, ch, MILIAMPER_TO_MICROAMPER, val)) {
 		return ERROR;
 	}
-	printf("done\n");
 	return OK;
 }/*}}}*/
 const CliCmdType CMD_IOUT_CAL = {/*{{{*/
@@ -360,10 +360,11 @@ int doIOutCal(int argc, char *argv[]) {
 		return ERROR;
 	}
 	float value = atof(argv[4]);
-	if(strcasecmp(argv[4], "reset")) {
+	if(strcasecmp(argv[4], "reset") == 0) {
 		if(OK != calibReset(dev, CALIB_I_OUT_CH1 + (ch - 1))) {
 			return ERROR;
 		}
+		return OK;
 	}
 	if(OK != calibSet(dev, CALIB_I_OUT_CH1 + (ch - 1), value)) {
 		return ERROR;
