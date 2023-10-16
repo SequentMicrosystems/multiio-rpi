@@ -4,9 +4,8 @@
 #include <string.h>
 #include <math.h>
 
-#include "cli.h"
 #include "comm.h"
-#include "multiio.h"
+#include "data.h"
 #include "wdt.h"
 
 const CliCmdType CMD_WDT_RELOAD = {
@@ -30,6 +29,34 @@ int doWdtReload(int argc, char *argv[]) {
 		printf("Fail to write watchdog reset key!\n");
 		return ERROR;
 	}
+	return OK;
+}
+
+const CliCmdType CMD_WDT_GET_PERIOD = {
+	"wdtprd",
+	2,
+	&doWdtGetPeriod,
+	"  wdtprd           Get the watchdog period in seconds, reload command must\n"
+	"                   be issue in this interval to prevent Raspberry Pi power off.\n",
+	"  Usage:           "PROGRAM_NAME" <id> wdtprd \n",
+	"  Example:         "PROGRAM_NAME" 0 wdtprd; Get the watchdog timer period on Board #0\n"
+};
+int doWdtGetPeriod(int argc, char *argv[]) {
+	if(argc != 3) {
+		return ARG_CNT_ERR;
+	}
+	int dev = doBoardInit(atoi(argv[1]));
+	if (dev <= 0) {
+		return ERROR;
+	}
+	uint8_t buf[2];
+	if (OK != i2cMem8Read(dev, I2C_MEM_WDT_INTERVAL_GET_ADD, buf, 2)) {
+		printf("Fail to read watchdog period!\n");
+		return ERROR;
+	}
+	uint16_t period;
+	memcpy(&period, buf, 2);
+	printf("%d\n", (int)period);
 	return OK;
 }
 
@@ -62,36 +89,6 @@ int doWdtSetPeriod(int argc, char *argv[]) {
 		printf("Fail to write watchdog period!\n");
 		return ERROR;
 	}
-	return OK;
-}
-
-const CliCmdType CMD_WDT_GET_PERIOD = {
-	"wdtprd",
-	2,
-	&doWdtGetPeriod,
-	"  wdtprd           Get the watchdog period in seconds, reload command must\n"
-	"                   be issue in this interval to prevent Raspberry Pi power off.\n",
-	"  Usage:           "PROGRAM_NAME" <id> wdtprd \n",
-	"  Example:         "PROGRAM_NAME" 0 wdtprd; Get the watchdog timer period on Board #0\n"
-};
-
-int doWdtGetPeriod(int argc, char *argv[])
-{
-	if(argc != 3) {
-		return ARG_CNT_ERR;
-	}
-	int dev = doBoardInit(atoi(argv[1]));
-	if (dev <= 0) {
-		return ERROR;
-	}
-	uint8_t buf[2];
-	if (OK != i2cMem8Read(dev, I2C_MEM_WDT_INTERVAL_GET_ADD, buf, 2)) {
-		printf("Fail to read watchdog period!\n");
-		return ERROR;
-	}
-	uint16_t period;
-	memcpy(&period, buf, 2);
-	printf("%d\n", (int)period);
 	return OK;
 }
 
@@ -154,6 +151,36 @@ int doWdtGetInitPeriod(int argc, char *argv[]) {
 	return OK;
 }
 
+const CliCmdType CMD_WDT_GET_OFF_PERIOD = {
+	"wdtoprd",
+	2,
+	&doWdtGetOffPeriod,
+	"  wdtoprd          Get the watchdog off period in seconds (max 48 days).\n"
+	"                   This is the time that watchdog mantain Raspberry turned off \n",
+	"  Usage:           "PROGRAM_NAME" <id> wdtoprd \n",
+	"  Example:         "PROGRAM_NAME" 0 wdtoprd; Get the watchdog off period on Board #0\n"
+};
+int doWdtGetOffPeriod(int argc, char *argv[])
+{
+	if(argc != 3) {
+		return ARG_CNT_ERR;
+	}
+	int dev = doBoardInit(atoi(argv[1]));
+	if (dev < 0) {
+		return ERROR;
+	}
+	uint8_t buf[4];
+	if (OK != i2cMem8Read(dev, I2C_MEM_WDT_POWER_OFF_INTERVAL_GET_ADD, buf, 4)) {
+		printf("Fail to read watchdog period!\n");
+		return ERROR;
+	}
+	uint32_t period;
+	memcpy(&period, buf, 4);
+	printf("%d\n", (int)period);
+
+	return OK;
+}
+
 const CliCmdType CMD_WDT_SET_OFF_PERIOD = {
 	"wdtopwr",
 	2,
@@ -185,37 +212,6 @@ int doWdtSetOffPeriod(int argc, char *argv[]) {
 	return OK;
 }
 
-const CliCmdType CMD_WDT_GET_OFF_PERIOD = {
-	"wdtoprd",
-	2,
-	&doWdtGetOffPeriod,
-	"  wdtoprd          Get the watchdog off period in seconds (max 48 days).\n"
-	"                   This is the time that watchdog mantain Raspberry turned off \n",
-	"  Usage:           "PROGRAM_NAME" <id> wdtoprd \n",
-	"  Example:         "PROGRAM_NAME" 0 wdtoprd; Get the watchdog off period on Board #0\n"
-};
-
-int doWdtGetOffPeriod(int argc, char *argv[])
-{
-	if(argc != 3) {
-		return ARG_CNT_ERR;
-	}
-	int dev = doBoardInit(atoi(argv[1]));
-	if (dev < 0) {
-		return ERROR;
-	}
-	uint8_t buf[4];
-	if (OK != i2cMem8Read(dev, I2C_MEM_WDT_POWER_OFF_INTERVAL_GET_ADD, buf, 4)) {
-		printf("Fail to read watchdog period!\n");
-		return ERROR;
-	}
-	uint32_t period;
-	memcpy(&period, buf, 4);
-	printf("%d\n", (int)period);
-	return OK;
-
-}
-
 const CliCmdType CMD_WDT_GET_RESET_COUNT = {
 	"wdtrcrd",
 	2,
@@ -228,8 +224,7 @@ int doWdtGetResetCount(int argc, char *argv[]) {
 	if(argc != 3) {
 		return ARG_CNT_ERR;
 	}
-	int dev = 0;
-	dev = doBoardInit(atoi(argv[1]));
+	int dev = doBoardInit(atoi(argv[1]));
 	if (dev < 0) {
 		return ERROR;
 	}

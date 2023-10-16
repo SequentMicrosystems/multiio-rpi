@@ -4,28 +4,23 @@
 #include "cli.h"
 
 extern const CliCmdType CMD_OPTO_READ;
-int doOptoRead(int argc, char *argv[]);
 extern const CliCmdType CMD_OPTO_EDGE_WRITE;
-int doOptoEdgeWrite(int argc, char *argv[]);
 extern const CliCmdType CMD_OPTO_EDGE_READ;
-int doOptoEdgeRead(int argc, char *argv[]);
 extern const CliCmdType CMD_OPTO_CNT_READ;
-int doOptoCntRead(int argc, char *argv[]);
 extern const CliCmdType CMD_OPTO_CNT_RESET;
-int doOptoCntReset(int argc, char *argv[]);
 extern const CliCmdType CMD_OPTO_ENC_WRITE;
-int doOptoEncoderWrite(int argc, char *argv[]);
 extern const CliCmdType CMD_OPTO_ENC_READ;
-int doOptoEncoderRead(int argc, char *argv[]);
 extern const CliCmdType CMD_OPTO_ENC_CNT_READ;
-int doOptoEncoderCntRead(int argc, char *argv[]);
 extern const CliCmdType CMD_OPTO_ENC_CNT_RESET;
-int doOptoEncoderCntReset(int argc, char *argv[]);
 
-typedef enum {
-	ON,
-	OFF,
-	STATE_COUNT
-} StateType;
+int doOptoRead(int argc, char *argv[]);
+int doOptoEdgeWrite(int argc, char *argv[]);
+int doOptoEdgeRead(int argc, char *argv[]);
+int doOptoCntRead(int argc, char *argv[]);
+int doOptoCntReset(int argc, char *argv[]);
+int doOptoEncoderWrite(int argc, char *argv[]);
+int doOptoEncoderRead(int argc, char *argv[]);
+int doOptoEncoderCntRead(int argc, char *argv[]);
+int doOptoEncoderCntReset(int argc, char *argv[]);
 
 #endif /* OPTO_H */

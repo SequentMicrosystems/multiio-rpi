@@ -17,7 +17,7 @@
 #include <unistd.h>
 
 #include "comm.h"
-#include "multiio.h"
+#include "data.h"
 
 int i2cSetup(int addr) {
 	char filename[32];

@@ -4,8 +4,7 @@
 
 #include "cli.h"
 #include "help.h"
-#include "multiio.h"
-#include "comm.h"
+#include "data.h"
 
 // TODO: Implement parseArgs(int argc, char *argv[]);
 

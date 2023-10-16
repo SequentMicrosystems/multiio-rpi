@@ -4,9 +4,8 @@
 #include <string.h>
 #include <math.h>
 
-#include "cli.h"
 #include "comm.h"
-#include "multiio.h"
+#include "data.h"
 #include "rtc.h"
 
 // TODO: debug cuz not working
