@@ -24,8 +24,8 @@ sudo apt-get install git build-essential
 
 Install the command:
 ```bash
-git clone https://github.com/SequentMicrosystems/megaind-rpi.git
-cd megaind-rpi/
+git clone https://github.com/SequentMicrosystems/multiio-rpi.git
+cd multiio-rpi/
 sudo make install
 ```
 
@@ -36,7 +36,7 @@ multiio -h
 
 If you clone the repository any update can be made with the following commands:
 ```bash
-cd megaind-rpi/  
+cd multiio-rpi/  
 git pull
 sudo make install
 ```  
