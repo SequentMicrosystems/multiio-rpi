@@ -3,5 +3,8 @@ multiio
 # build directory
 build/
 
+# WIP, do not publish
+python/__init__.py
+
 # nvim session
 .s
