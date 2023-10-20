@@ -5,16 +5,16 @@
 #include "data.h"
 #include "relay.h"
 
-const CliCmdType CMD_DOD_READ = {
-	"dodrd",
+const CliCmdType CMD_RELAY_READ = {
+	"relrd",
         2,
-        &doDODRead,
-        "  dodrd            Read open-drain output digital value\n",
-        "  Usage 1:         "PROGRAM_NAME" <id> dodrd <channel[1.."STR(RELAY_CH_NO)"]>\n"
-        "  Usage 2:         "PROGRAM_NAME" <id> dodrd\n",
-        "  Example:         "PROGRAM_NAME" 0 dodrd 2  Get the state of open-drain #2 on board #0\n"
+        &doRelayRead,
+        "  relrd            Read relay state\n",
+        "  Usage 1:         "PROGRAM_NAME" <id> relrd <channel[1.."STR(RELAY_CH_NO)"]>\n"
+        "  Usage 2:         "PROGRAM_NAME" <id> relrd\n",
+        "  Example:         "PROGRAM_NAME" 0 relrd 2  Get the state of relay #2 on board #0\n"
 };
-int doDODRead(int argc, char *argv[]) {
+int doRelayRead(int argc, char *argv[]) {
         if(!(argc == 3 || argc == 4)) {
                 return ARG_CNT_ERR;
         }
@@ -57,17 +57,17 @@ int doDODRead(int argc, char *argv[]) {
         return OK;
 } 
 
-const CliCmdType CMD_DOD_WRITE = {
-	"dodwr",
+const CliCmdType CMD_RELAY_WRITE = {
+	"relwr",
         2,
-        &doDODWrite,
-        "  dodwr            Write open-drain output digital value\n",
-        "  Usage 1:         "PROGRAM_NAME" <id> dodwr <channel[1.."STR(RELAY_CH_NO)"]> <state(0/1)>\n"
-        "  Usage 2:         "PROGRAM_NAME" <id> dodwr <mask[0.."STR(MASK(RELAY_CH_NO))"]>\n",
-        "  Example:         "PROGRAM_NAME" 0 dodwr 2 1  Set the digital value on open-drain output\n"
+        &doRelayWrite,
+        "  relwr            Change relay state\n",
+        "  Usage 1:         "PROGRAM_NAME" <id> relwr <channel[1.."STR(RELAY_CH_NO)"]> <state(0/1)>\n"
+        "  Usage 2:         "PROGRAM_NAME" <id> relwr <mask[0.."STR(MASK(RELAY_CH_NO))"]>\n",
+        "  Example:         "PROGRAM_NAME" 0 relwr 2 1  Set the state of relay #2 to ON\n"
 		            "channel #2 on board #1 to enable\n"
 };
-int doDODWrite(int argc, char *argv[]) {
+int doRelayWrite(int argc, char *argv[]) {
         if(!(argc == 4 || argc == 5)) {
                 return ARG_CNT_ERR;
         }

@@ -73,7 +73,7 @@ int doRtdResRead(int argc, char *argv[]) {
         return OK;
 }
 
-const CliCmdType CMD_RTD_CALIB = {
+const CliCmdType CMD_RTD_RES_CALIB = {
         "rtdcal",
         2,
         &doRtdResCal,

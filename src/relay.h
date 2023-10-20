@@ -3,10 +3,10 @@
 
 #include "cli.h"
 
-extern const CliCmdType CMD_DOD_READ;
-extern const CliCmdType CMD_DOD_WRITE;
+extern const CliCmdType CMD_RELAY_READ;
+extern const CliCmdType CMD_RELAY_WRITE;
 
-int doDODRead(int argc, char *argv[]);
-int doDODWrite(int argc, char *argv[]);
+int doRelayRead(int argc, char *argv[]);
+int doRelayWrite(int argc, char *argv[]);
 
 #endif /* RELAY_H */
