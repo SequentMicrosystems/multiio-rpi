@@ -3,8 +3,11 @@ multiio
 # build directory
 build/
 
-# WIP, do not publish
-python/__init__.py
+# python build directories
+python/__pycache__
+python/dist
+python/docs/markdown
+python/multiio.egg-info
 
 # nvim session
 .s

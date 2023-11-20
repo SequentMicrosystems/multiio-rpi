@@ -46,21 +46,21 @@ const CliCmdType CMD_BUTTON_LATCH_READ = {
         "  Example:         "PROGRAM_NAME" 0 blrd \n"
 };
 int doButtonLatch(int argc, char *argv[]) {
+	if(argc != 3) {
+		return ARG_CNT_ERR;
+	}
         int dev = 0;
         State state = STATE_COUNT;
         dev = doBoardInit(atoi(argv[1]));
         if(dev <= 0) {
                 return ERROR;
         }
-        if(argc == 3) {
-                if(OK != buttonLatchGet(dev, &state)) {
-                        printf("Fail to read!\n");
-                        return ERROR;
-                }
-                printf("%d\n", state);
-                return OK;
-        }
-        return ARG_CNT_ERR;
+	if(OK != buttonLatchGet(dev, &state)) {
+		printf("Fail to read!\n");
+		return ERROR;
+	}
+	printf("%d\n", state);
+	return OK;
 }
 
 const CliCmdType CMD_BUTTON_READ = {
@@ -72,19 +72,19 @@ const CliCmdType CMD_BUTTON_READ = {
         "  Example:         "PROGRAM_NAME" 0 brd \n"
 };
 int doButton(int argc, char *argv[]) {
+	if(argc != 3) {
+		return ARG_CNT_ERR;
+	}
         int dev = 0;
         State state = STATE_COUNT;
         dev = doBoardInit(atoi(argv[1]));
-        if(dev <= 0) {
+        if(dev < 0) {
                 return ERROR;
         }
-        if(argc == 3) {
-                if(OK != buttonGet(dev, &state)) {
-                        printf("Fail to read!\n");
-                        return ERROR;
-                }
-                printf("%d\n", state);
-                return OK;
-        }
-        return ARG_CNT_ERR;
+	if(OK != buttonGet(dev, &state)) {
+		printf("Fail to read!\n");
+		return ERROR;
+	}
+	printf("%d\n", state);
+	return OK;
 }
