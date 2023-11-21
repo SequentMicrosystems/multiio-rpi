@@ -2,25 +2,25 @@
 
 # Install
 
-```console
+```bash
 sudo pip install multiio
 ```
 
 or
 
-```console
+```bash
 sudo pip3 install multiio
 ```
 
 # Update
 
-```console
+```bash
 sudo pip install multiio -U
 ```
 
 or
 
-```console
+```bash
 sudo pip3 install multiio -U
 ```
 

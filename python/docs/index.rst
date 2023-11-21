@@ -4,26 +4,26 @@ Welcome to multiio's documentation!
 Install
 =======
 
-.. code-block:: console
+.. code-block:: bash
 
     sudo pip install multiio
 
 or
 
-.. code-block:: console
+.. code-block:: bash
 
     sudo pip3 install multiio
 
 Update
 ======
 
-.. code-block:: console
+.. code-block:: bash
 
     sudo pip install multiio -U
 
 or
 
-.. code-block:: console
+.. code-block:: bash
 
     sudo pip3 install multiio -U
 
