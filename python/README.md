@@ -165,12 +165,10 @@ Get led state.
 * **Returns:**
   0(OFF) or 1(ON)
 
-#### get_motor(channel)
+#### get_motor()
 
 Get motor speed value in %.
 
-* **Parameters:**
-  **channel** (*int*) – Channel number
 * **Returns:**
   (float) Motor speed value in %
 
@@ -331,13 +329,12 @@ Set led state.
   * **led** (*int*) – Led number
   * **val** – 0(OFF) or 1(ON)
 
-#### set_motor(channel, value)
+#### set_motor(value)
 
 Set motor speed value in %.
 
 * **Parameters:**
-  * **channel** (*int*) – Channel number
-  * **value** (*float*) – Speed value in %
+  **value** (*float*) – Speed value in %
 
 #### set_opto_edge(channel, value)
 
