@@ -1,0 +1,102 @@
+CARD_NAME = "Multi-IO"
+VERSION = "1.0.4"
+
+SLAVE_OWN_ADDRESS_BASE = 0x06
+STACK_LEVEL_MAX = 7
+
+CALIBRATION_KEY = 0xaa
+RESET_CALIBRATION_KEY  = 0x55
+WDT_RESET_SIGNATURE     = 0xca
+WDT_RESET_COUNT_SIGNATURE    = 0xbe
+
+VOLT_TO_MILIVOLT = 1000
+MILIAMPER_TO_MICROAMPER = 1000
+
+# i2c memory addresses
+class I2C_MEM:
+    RELAYS = 0
+    RELAY_SET = 1
+    RELAY_CLR = 2
+    LEDS = 3
+    LED_SET = 4
+    LED_CLR = 5
+    OPTO = 6
+    ANALOG_TYPE = 7
+    U_IN = 8
+    I_IN = 12
+    U_OUT = 16
+    I_OUT = 20
+    MOT_VAL = 24
+    SERVO_VAL1 = 26
+    SERVO_VAL2 = 28
+    RTD_VAL1_ADD = 30
+    RTD_RES1_ADD = 38
+    DIAG_TEMPERATURE_ADD = 46
+    DIAG_3V3_MV_ADD = 47
+    DIAG_3V3_MV_ADD1 = 48
+    OPTO_IT_RISING_ADD = 49
+    OPTO_IT_FALLING_ADD = 50
+    OPTO_ENC_ENABLE_ADD = 51
+    OPTO_CNT_RST_ADD = 52
+    OPTO_ENC_CNT_RST_ADD = 53
+    OPTO_EDGE_COUNT_ADD = 54
+    OPTO_ENC_COUNT_ADD = 70
+    CALIB_VALUE = 78
+    CALIB_CHANNEL = 82
+    CALIB_KEY = 83
+    CALIB_STATUS = 84
+    WDT_RESET_ADD = 98
+    WDT_INTERVAL_SET_ADD = 99
+    WDT_INTERVAL_GET_ADD = 101
+    WDT_INIT_INTERVAL_SET_ADD = 103
+    WDT_INIT_INTERVAL_GET_ADD = 105
+    WDT_RESET_COUNT_ADD = 107
+    WDT_CLEAR_RESET_COUNT_ADD = 109
+    WDT_POWER_OFF_INTERVAL_SET_ADD = 110
+    WDT_POWER_OFF_INTERVAL_GET_ADD = 111
+    REVISION_HW_MAJOR_ADD = 0x78
+    REVISION_HW_MINOR_ADD = 0x79
+    REVISION_MAJOR_ADD = 0x7a
+    REVISION_MINOR_ADD = 0x7b
+    BUTTON = 0xff
+    RTC_YEAR_ADD = 85
+    RTC_MONTH_ADD = 86
+    RTC_DAY_ADD = 87
+    RTC_HOUR_ADD = 88
+    RTC_MINUTE_ADD = 89
+    RTC_SECOND_ADD = 90
+    RTC_SET_YEAR_ADD = 91
+    RTC_SET_MONTH_ADD = 92
+    RTC_SET_DAY_ADD = 93
+    RTC_SET_HOUR_ADD = 94
+    RTC_SET_MINUTE_ADD = 95
+    RTC_SET_SECOND_ADD = 96
+    RTC_CMD_ADD = 97
+    SLAVE_BUFF_SIZE = 255
+
+class CALIB:
+    IN_PROGRESS = 0
+    DONE = 1
+    ERROR = 2
+    RTD_CH1 = 1
+    U_IN_CH1 = 3
+    I_IN_CH1 = 5
+    U_OUT_CH1 = 7
+    I_OUT_CH1 = 9
+    LAST_CH = 10
+
+CHANNEL_NO = {
+    "motor": 1,
+    "opto": 4,
+    "opto_enc": 4 / 2,
+    "adc": 3,
+    "i_in": 2,
+    "u_in": 2,
+    "i_out": 2,
+    "u_out": 2,
+    "rtd": 2,
+    "led": 6,
+    "relay": 2,
+    "servo": 2,
+}
+

@@ -1,10 +1,15 @@
 # binary
-multiio
+/multiio
 # build directory
-build/
+/build/
 
-# WIP, do not publish
-python/__init__.py
+# python build directories
+/python/__pycache__/
+/python/build/
+/python/dist/
+/python/docs/markdown/
+/python/docs/doctrees/
+/python/multiio.egg-info/
 
 # nvim session
 .s

@@ -71,6 +71,15 @@ int i2cMem8Write(int dev, int add, uint8_t* buf, int size) {
 	return 0;
 }
 
+int doBoardCheck(int id, int dev) {
+	uint8_t buf[1];
+	if(ERROR == i2cMem8Read(dev, I2C_MEM_REVISION_MAJOR_ADD, buf , 1)) {
+		printf(CARD_NAME" id %d not detected\n", id);
+		return ERROR;
+	}
+	return OK;
+}
+
 int doBoardInit(int id) {
 	if(!(0 <= id && id <= 7)) {
 		return ARG_RANGE_ERROR;
@@ -80,9 +89,7 @@ int doBoardInit(int id) {
 	if(dev < 0) {
 		return ERROR;
 	}
-	uint8_t buf[1];
-	if(ERROR == i2cMem8Read(dev, I2C_MEM_REVISION_MAJOR_ADD, buf , 1)) {
-		printf(CARD_NAME" id %d not detected\n", id);
+	if(OK != doBoardCheck(id, dev)) {
 		return ERROR;
 	}
 	return dev;
