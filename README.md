@@ -29,7 +29,7 @@ cd multiio-rpi/
 sudo make install
 ```
 
-Now you can access all the functions of the [Multi-IO](https://link) through the command "multiio". Use -h option for help:
+Now you can access all the functions of the [Multi-IO](https://sequentmicrosystems.com/collections/all-io-cards/products/multi-io-8-layer-stackable-hat-for-raspberry-pi) through the command "multiio". Use -h option for help:
 ```bash
 multiio -h
 ```
@@ -39,4 +39,9 @@ If you clone the repository any update can be made with the following commands:
 cd multiio-rpi/  
 git pull
 sudo make install
-```  
+```
+
+ ## Examples
+
+ The repository contains usage [examples](https://github.com/SequentMicrosystems/multiio-rpi/tree/main/examples)
+ 
