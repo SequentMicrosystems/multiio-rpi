@@ -1,4 +1,4 @@
-# multiio-rpi
+# [multiio-rpi](https://sequentmicrosystems.com/collections/all-io-cards/products/multi-io-8-layer-stackable-hat-for-raspberry-pi)
 
 ## Setup
 
