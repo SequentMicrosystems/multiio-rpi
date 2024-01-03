@@ -228,7 +228,7 @@ int doOptoRead(int argc, char *argv[]) {
 			printf("Fail to read!\n");
 			return ERROR;
 		}
-		if(state != 0) {
+		if(state != OFF) {
 			printf("1\n");
 		}
 		else {

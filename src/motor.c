@@ -14,9 +14,9 @@ const CliCmdType CMD_MOTOR_READ = {
         "motrd",
         2,
         &doMotorRead,
-        "  motrd            Display motor speed value in %\n",
+        "  motrd            Display motor PWM fill factor value in %\n",
         "  Usage:           "PROGRAM_NAME" <id> motrd\n",
-        "  Example:         "PROGRAM_NAME" 0 motrd  Display motor speed on board #0 \n"
+        "  Example:         "PROGRAM_NAME" 0 motrd  Display motor PWM on board #0 \n"
 };
 int doMotorRead(int argc, char *argv[]) {
         (void)argv;
@@ -42,9 +42,9 @@ const CliCmdType CMD_MOTOR_WRITE = {
         "motwr",
         2,
         &doMotorWrite,
-        "  motwr            Set the servo speed (-100..100)\n",
+        "  motwr            Set the motor PWM fill factor (-100..100)\n",
         "  Usage:           "PROGRAM_NAME" <id> motwr <value(%)>\n",
-        "  Example:         "PROGRAM_NAME" 0 motwr 25.2  Set motor speed to 25.2% on board #0  \n"
+        "  Example:         "PROGRAM_NAME" 0 motwr 25.2  Set motor PWM  to 25.2% on board #0  \n"
 };
 int doMotorWrite(int argc, char *argv[]) {
         if(argc != 4) {

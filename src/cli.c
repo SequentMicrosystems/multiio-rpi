@@ -13,6 +13,7 @@
 #include "servo.h"
 #include "wdt.h"
 #include "button.h"
+#include "rs485.h"
 
 const CliCmdType *gCmdArray[] = {
 	&CMD_HELP,
@@ -62,5 +63,7 @@ const CliCmdType *gCmdArray[] = {
 	&CMD_LED_WRITE,
 	&CMD_BUTTON_READ,
 	&CMD_BUTTON_LATCH_READ,
+	&CMD_CFG485_READ,
+	&CMD_CFG485_WRITE,
 	0
 };
