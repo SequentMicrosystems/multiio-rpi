@@ -3,25 +3,25 @@
 # Install
 
 ```bash
-sudo pip install multiio
+sudo pip install SMmultiio
 ```
 
 or
 
 ```bash
-sudo pip3 install multiio
+sudo pip3 install SMmultiio
 ```
 
 # Update
 
 ```bash
-sudo pip install multiio -U
+sudo pip install SMmultiio -U
 ```
 
 or
 
 ```bash
-sudo pip3 install multiio -U
+sudo pip3 install SMmultiio -U
 ```
 
 # Initiate class
@@ -31,9 +31,9 @@ $ python
 Python 3.9.2 (default, Feb 28 2021, 17:03:44)
 [GCC 10.2.1 20210110] on linux
 Type "help", "copyright", "credits" or "license" for more information.
->>> import multiio.SMmultiio as m
->>> multiio = m()
->>>
+>>> import multiio
+>>> card = multiio.SMmultiio()
+>>> card.set_all_leds(15) 
 ```
 
 # Documentation
