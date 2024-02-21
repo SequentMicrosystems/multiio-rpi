@@ -52,9 +52,9 @@ class SMmultiio:
     def _get_block_data(self, address, byteno=4):
         return self.bus.read_i2c_block_data(self._hw_address_, address, byteno)
     def _set_byte(self, address, value):
-        self.bus.write_byte_data(self._hw_address_, address, value)
+        self.bus.write_byte_data(self._hw_address_, address, int(value))
     def _set_word(self, address, value):
-        self.bus.write_word_data(self._hw_address_, address, value)
+        self.bus.write_word_data(self._hw_address_, address, int(value))
     def _set_float(self, address, value):
         ba = bytearray(struct.pack("f", value))
         self.bus.write_block_data(self._hw_address_, address, ba)
