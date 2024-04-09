@@ -14,9 +14,9 @@
 
 from setuptools import setup, find_packages
 setup(
-    name='multiio',
+    name='SMmultiio',
     packages=find_packages(),
-    version='1.0.5',
+    version='1.2.0',
     license='MIT',
     description='Library to control Multi-IO Automation Card',
     #long_description=long_description,

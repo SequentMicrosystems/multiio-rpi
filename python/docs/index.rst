@@ -33,8 +33,7 @@ Initiate class
 .. code-block:: console
 
    $ python
-   Python 3.9.2 (default, Feb 28 2021, 17:03:44) 
-   [GCC 10.2.1 20210110] on linux
+   Python 3.11.8 (main, Feb 12 2024, 14:50:05) [GCC 13.2.1 20230801] on linux
    Type "help", "copyright", "credits" or "license" for more information.
    >>> import multiio.SMmultiio as m
    >>> multiio = m()

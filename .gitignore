@@ -4,12 +4,12 @@
 /build/
 
 # python build directories
-/python/__pycache__/
+__pycache__/
 /python/build/
 /python/dist/
 /python/docs/markdown/
 /python/docs/doctrees/
-/python/multiio.egg-info/
+/python/SMmultiio.egg-info/
 
 # nvim session
 .s
