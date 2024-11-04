@@ -1,4 +1,4 @@
-Welcome to multiio's documentation!
+Welcome to SMmultiio's documentation!
 ===================================
 
 Install
@@ -6,26 +6,26 @@ Install
 
 .. code-block:: bash
 
-    sudo pip install multiio
+    sudo pip install SMmultiio
 
 or
 
 .. code-block:: bash
 
-    sudo pip3 install multiio
+    sudo pip3 install SMmultiio
 
 Update
 ======
 
 .. code-block:: bash
 
-    sudo pip install multiio -U
+    sudo pip install SMmultiio -U
 
 or
 
 .. code-block:: bash
 
-    sudo pip3 install multiio -U
+    sudo pip3 install SMmultiio -U
 
 Initiate class
 ==============
@@ -35,8 +35,8 @@ Initiate class
    $ python
    Python 3.11.8 (main, Feb 12 2024, 14:50:05) [GCC 13.2.1 20230801] on linux
    Type "help", "copyright", "credits" or "license" for more information.
-   >>> import multiio.SMmultiio as m
-   >>> multiio = m()
+   >>> import multiio
+   >>> mio = multiio.SMmultiio()
    >>>
 
 
