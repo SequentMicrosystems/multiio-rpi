@@ -37,6 +37,7 @@ Initiate class
    Type "help", "copyright", "credits" or "license" for more information.
    >>> import multiio
    >>> mio = multiio.SMmultiio()
+   >>> mio.set_i_out(1, 10)
    >>>
 
 

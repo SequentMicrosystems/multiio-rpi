@@ -32,6 +32,7 @@ Python 3.11.8 (main, Feb 12 2024, 14:50:05) [GCC 13.2.1 20230801] on linux
 Type "help", "copyright", "credits" or "license" for more information.
 >>> import multiio
 >>> mio = multiio.SMmultiio()
+>>> mio.set_i_out(1, 10)
 >>>
 ```
 
