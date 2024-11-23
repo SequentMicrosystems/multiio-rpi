@@ -10,7 +10,7 @@ import os
 import sys
 sys.path.insert(0, os.path.abspath('..'))
 
-project = 'multiio'
+project = 'SMmultiio'
 copyright = '2023, Sequent Microsystems'
 author = 'Sequent Microsystems'
 release = '1.0.2'

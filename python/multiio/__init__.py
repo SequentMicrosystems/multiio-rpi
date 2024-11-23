@@ -581,7 +581,7 @@ class SMmultiio:
         Returns:
             (float) Motor speed value in %
         """
-        return self._get_word(I2C_MEM.MOT_VAL) / 10
+        return self._get_i16(I2C_MEM.MOT_VAL) / 10
     def set_motor(self, value):
         """Set motor speed value in %.
 
