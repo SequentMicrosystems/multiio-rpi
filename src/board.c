@@ -85,7 +85,7 @@ int doList(int argc, char *argv[])
 		printf("Id:");
 	}
 	for (int i = 0; i < cnt; ++i) {
-		printf(" %d", ids[cnt]);
+		printf(" %d", ids[i]);
 	}
 	printf("\n");
 	return OK ;
