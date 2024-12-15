@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <fcntl.h>
 
 #include "board.h"
 #include "comm.h"
@@ -41,4 +43,51 @@ int doBoard(int argc, char *argv[]) {
         return OK;
 }
 
+const CliCmdType CMD_LIST =
+{
+	"-list",
+	1,
+	&doList,
+	"  -list            Display cartd in the srack and their stack level\n",
+	"  Usage:           "PROGRAM_NAME" -list\n",
+	"  Example:         "PROGRAM_NAME" -list  Display list of the connected cards\n"
+
+};
+int doList(int argc, char *argv[])
+{
+	(void)argc;
+	(void)argv;
+
+	int ids[8];
+	int i;
+	int cnt = 0;
+
+	// Supress the output of doBoardInit(Don't want to see the "Failed to open the bus")
+	int stdout_fd = dup(STDOUT_FILENO);
+	int null_fd = open("/dev/null", O_WRONLY);
+	dup2(null_fd, STDOUT_FILENO);
+	close(null_fd);
+	for (i = 0; i < 8; i++)
+	{
+		if (doBoardInit(i) >= 0)
+		{
+			ids[cnt] = i;
+			cnt++;
+		}
+	}
+	fflush(stdout);
+	// Restore the stdout
+	dup2(stdout_fd, STDOUT_FILENO);
+	close(stdout_fd);
+	printf("%d board(s) detected\n", cnt);
+	if (cnt > 0)
+	{
+		printf("Id:");
+	}
+	for (int i = 0; i < cnt; ++i) {
+		printf(" %d", ids[cnt]);
+	}
+	printf("\n");
+	return OK ;
+}
 // vi:fdm=marker

@@ -18,6 +18,7 @@
 const CliCmdType *gCmdArray[] = {
 	&CMD_HELP,
 	&CMD_VERSION,
+	&CMD_LIST,
 	&CMD_BOARD,
 	&CMD_CAL_STATUS,
 	&CMD_UIN_READ,
