@@ -1,4 +1,4 @@
-# [multiio-rpi](https://sequentmicrosystems.com/collections/all-io-cards/products/multi-io-8-layer-stackable-hat-for-raspberry-pi)
+# [multiio-rpi](https://sequentmicrosystems.com/products/multi-io-hat-8-layer-stackable-hat-for-raspberry-pi)
 
 ## Setup
 
@@ -29,7 +29,7 @@ cd multiio-rpi/
 sudo make install
 ```
 
-Now you can access all the functions of the [Multi-IO](https://sequentmicrosystems.com/collections/all-io-cards/products/multi-io-8-layer-stackable-hat-for-raspberry-pi) through the command "multiio". Use -h option for help:
+Now you can access all the functions of the [Multi-IO](https://sequentmicrosystems.com/products/multi-io-hat-8-layer-stackable-hat-for-raspberry-pi) through the command "multiio". Use -h option for help:
 ```bash
 multiio -h
 ```
