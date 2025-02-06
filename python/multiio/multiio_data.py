@@ -88,7 +88,7 @@ class CALIB:
 CHANNEL_NO = {
     "motor": 1,
     "opto": 4,
-    "opto_enc": 4 / 2,
+    "opto_enc": 2,
     "adc": 3,
     "i_in": 2,
     "u_in": 2,
