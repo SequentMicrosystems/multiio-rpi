@@ -1,4 +1,4 @@
-TARGET  = $(shell awk '/#define PROGRAM_NAME/ {print $$3}' src/data.h | tr -d '"')
+TARGET  = $(shell awk '/\#define PROGRAM_NAME/ {print $$3}' src/data.h | tr -d '"')
 
 DESTDIR ?= /usr/local
 
