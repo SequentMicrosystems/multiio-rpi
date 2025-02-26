@@ -160,7 +160,7 @@ const CliCmdType CMD_IIN_CAL = {/*{{{*/
 	"  iincal           Calibrate 4-20mA input channel, the calibration must be done in 2 points at min 10mA apart\n",
 	"  Usage 1:         "PROGRAM_NAME" <id> iincal <channel> <value(A)>\n"
 	"  Usage 2:         "PROGRAM_NAME" <id> iincal <channel> reset\n",
-	"  Example:         "PROGRAM_NAME" 0 iincal 1 0.5; Calibrate the 4-20mA input channel #1 on board #0 at 0.5V\n"
+	"  Example:         "PROGRAM_NAME" 0 iincal 1 5; Calibrate the 4-20mA input channel #1 on board #0 at 5mA\n"
 };
 int doIInCal(int argc, char *argv[]) {
 	if(argc != 5) {
@@ -345,7 +345,7 @@ const CliCmdType CMD_IOUT_CAL = {/*{{{*/
 	"  ioutcal          Calibrate 4-20mA output channel, the calibration must be done in 2 points at min 10mA apart\n",
 	"  Usage 1:         "PROGRAM_NAME" <id> ioutcal <channel> <value(A)>\n"
 	"  Usage 2:         "PROGRAM_NAME" <id> ioutcal <channel> reset\n",
-	"  Example:         "PROGRAM_NAME" 0 ioutcal 1 0.5; Calibrate the 4-20mA output channel #1 on board #0 at 0.5V\n"
+	"  Example:         "PROGRAM_NAME" 0 ioutcal 1 5; Calibrate the 4-20mA output channel #1 on board #0 at 5mA\n"
 };
 int doIOutCal(int argc, char *argv[]) {
 	if(argc != 5) {

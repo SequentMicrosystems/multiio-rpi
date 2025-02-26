@@ -40,12 +40,12 @@ int doLedRead(int argc, char *argv[]) {
         else if(argc == 4) {
 		uint8_t buf[1];
 		if(OK != i2cMem8Read(dev, I2C_MEM_LEDS, buf, 1)) {
-			printf("Fail to write!\n");
+			printf("Fail to read!\n");
 			return ERROR;
 		}
 		int led = atoi(argv[3]);
                 if(!(1 <= led && led <= LED_CH_NO)) {
-			printf("Led number out of range");
+			printf("Led number out of range[1.."STR(LED_CH_NO)"]");
                         return ARG_RANGE_ERROR;
                 }
 		if(buf[0] & (1 << (led - 1))) {
@@ -76,7 +76,7 @@ int doLedWrite(int argc, char *argv[]) {
         }
         if(argc == 4) {
                 int mask = atoi(argv[3]);
-                if(!(0 <= mask && mask <= (1 << LED_CH_NO))) {
+                if(!(0 <= mask && mask < (1 << LED_CH_NO))) {
                         return ARG_RANGE_ERROR;
                 }
                 uint8_t buf[1];
@@ -89,7 +89,7 @@ int doLedWrite(int argc, char *argv[]) {
         else if(argc == 5) {
                 int led = atoi(argv[3]);
                 if(!(1 <= led && led <= LED_CH_NO)) {
-			printf("Led number out of range");
+			printf("Led number out of range[1.."STR(LED_CH_NO)"]");
                         return ARG_RANGE_ERROR;
                 }
                 int state = atoi(argv[4]);
