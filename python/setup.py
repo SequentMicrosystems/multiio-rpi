@@ -14,9 +14,9 @@ with open("README.md", 'r') as f:
 
 from setuptools import setup, find_packages
 setup(
-    name='SMmultiio',
+    name='smmultiio',
     packages=find_packages(),
-    version='1.2.5',
+    version='1.2.6',
     license='MIT',
     description='Library to control Multi-IO Automation Card',
     long_description=long_description,

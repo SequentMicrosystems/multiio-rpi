@@ -9,7 +9,7 @@ __pycache__/
 /python/dist/
 /python/docs/markdown/
 /python/docs/doctrees/
-/python/SMmultiio.egg-info/
+/python/*.egg-info/
 
 # nvim session
 .s
