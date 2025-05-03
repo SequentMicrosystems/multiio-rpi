@@ -477,7 +477,7 @@ class SMmultiio:
         if(value & 2):
             falling |= channel_bit
         else:
-            rising &= ~channel_bit
+            falling &= ~channel_bit
         self._set_byte(I2C_MEM.OPTO_IT_RISING_ADD, rising)
         self._set_byte(I2C_MEM.OPTO_IT_FALLING_ADD, falling)
     def get_opto_counter(self, channel):
