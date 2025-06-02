@@ -66,7 +66,7 @@ class SMmultiio:
 
     @staticmethod
     def _check_channel(channel_type, channel):
-        if not (0 <= channel and channel <= CHANNEL_NO[channel_type]):
+        if not (0 < channel and channel <= CHANNEL_NO[channel_type]):
             raise ValueError("Invalid {} channel number. Must be [1..{}]!".format(channel_type, CHANNEL_NO[channel_type]))
     def _calib_set(self, channel, value):
         ba = bytearray(struct.pack("f", value))
@@ -551,6 +551,31 @@ class SMmultiio:
         """
         self._check_channel("opto_enc", channel)
         self._set_byte(I2C_MEM.OPTO_ENC_CNT_RST_ADD, channel)
+
+    def get_opto_frequency(self, channel):
+        """Get frequency of optocoupled input channel.
+        
+        Args:
+            channel (int): Channel number
+        Returns:
+            (int) Optocoupled input frequency in Hz.
+        """
+        self._check_channel("opto", channel)
+        return self._get_word(I2C_MEM.IN_FREQUENCY + (channel - 1) * 2)
+    
+    def get_opto_pwm_fill(self, channel):
+        """Get optocoupled input channel PWM fill value.
+
+        Args:
+            channel (int): Channel number
+
+        Returns:
+            (float) PWM fill value in %.
+        """
+        self._check_channel("opto", channel)
+        raw_value = self._get_word(I2C_MEM.PWM_IN_FILL + (channel - 1) * 2)
+        return float(raw_value) / data.OPTO_FILL_FACTOR_SCALE
+
 
     def get_servo(self, channel):
         """Get servo position value in %.

@@ -218,6 +218,24 @@ Get optocoupled quadrature encoder state.
 * **Returns:**
   (int) state 0(disabled)/1(enabled)
 
+#### get_opto_frequency(channel)
+
+Get frequency of optocoupled input channel.
+
+* **Parameters:**
+  **channel** (*int*) – Channel number
+* **Returns:**
+  (int) Optocoupled input frequency in Hz.
+
+#### get_opto_pwm_fill(channel)
+
+Get optocoupled input channel PWM fill value.
+
+* **Parameters:**
+  **channel** (*int*) – Channel number
+* **Returns:**
+  (float) PWM fill value in %.
+
 #### get_relay(relay)
 
 Get relay state.
