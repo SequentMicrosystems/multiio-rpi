@@ -14,6 +14,7 @@ extern const CliCmdType CMD_UIN_CAL;
 extern const CliCmdType CMD_IIN_CAL;
 extern const CliCmdType CMD_UOUT_CAL;
 extern const CliCmdType CMD_IOUT_CAL;
+extern const CliCmdType CMD_RAW_IN_READ;
 
 int doUInRead(int argc, char *argv[]);
 int doUOutRead(int argc, char *argv[]);
@@ -26,7 +27,7 @@ int doUInCal(int argc, char *argv[]);
 int doIInCal(int argc, char *argv[]);
 int doUOutCal(int argc, char *argv[]);
 int doIOutCal(int argc, char *argv[]);
-
+int doRawInRead(int argc, char *argv[]);
 #endif /* ANALOG_H */
 
 // vi:fdm=marker

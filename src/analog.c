@@ -372,4 +372,35 @@ int doIOutCal(int argc, char *argv[]) {
 	return OK;
 }/*}}}*/
 
+const CliCmdType CMD_RAW_IN_READ = {/*{{{*/
+	"rawrd",
+	2,
+	&doRawInRead,
+	"  rawrd            Read ADC raw input value\n",
+	"  Usage:           "PROGRAM_NAME" <id> rawrd <channel>\n",
+	"  Example:         "PROGRAM_NAME" 0 rawrd 2 #Read raw adc values on channel #2 on board #0\n",
+};
+int doRawInRead(int argc, char *argv[]) {
+	if(argc != 4) {
+		return ARG_CNT_ERR;
+	}
+	int id = atoi(argv[1]);
+	int dev = doBoardInit(id);
+	if(dev < 0) {
+		return ERROR;
+	}
+	int ch = atoi(argv[3]);
+	if(ch < 1 || ch > 4) {
+		return ARG_RANGE_ERROR;
+	}
+	uint8_t buf[ANALOG_VAL_SIZE];
+	if(OK != i2cMem8Read(dev, I2C_MEM_ADC_RAW + (ch - 1) * ANALOG_VAL_SIZE, buf, ANALOG_VAL_SIZE)) {
+		return ERROR;
+	}
+	uint16_t raw = 0;
+	memcpy(&raw, buf, ANALOG_VAL_SIZE);
+	printf("%d\n", raw);
+	return OK;
+}/*}}}*/
+
 // vi:fdm=marker

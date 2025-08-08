@@ -25,6 +25,7 @@ const CliCmdType *gCmdArray[] = {
 	&CMD_UIN_CAL,
 	&CMD_IIN_READ,
 	&CMD_IIN_CAL,
+	&CMD_RAW_IN_READ,
 	&CMD_UOUT_READ,
 	&CMD_UOUT_WRITE,
 	&CMD_UOUT_CAL,
