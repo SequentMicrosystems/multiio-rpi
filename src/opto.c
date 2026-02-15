@@ -74,6 +74,8 @@ int optoGet(int dev, int *val)
 	return OK ;
 }
 
+
+
 int optoEdgeGet(int dev, uint8_t ch, uint8_t *val)
 {
 	if (NULL == val)
@@ -304,6 +306,46 @@ int optoEncRstCnt(int dev, uint8_t ch)
 		return ERROR ;
 	}
 	if (OK != i2cMem8Write(dev, I2C_MEM_OPTO_ENC_CNT_RST_ADD, &ch, 1))
+	{
+		return ERROR ;
+	}
+	return OK ;
+}
+
+int optoFiltIntGet(int dev, uint16_t *val)
+{
+	
+	if (NULL == val)
+	{
+		return ERROR ;
+	}
+	uint8_t buf[2];
+	if (OK
+		!= i2cMem8Read(dev,
+			I2C_MEM_OPTO_FILTRED_INT_MS , buf,
+			2))
+	{
+		return ERROR ;
+	}
+	memcpy(val, buf, 2);
+	return OK ;
+}
+#define MAX_FILT_INT_MS 10000
+int optoFiltIntSet(int dev, int val)
+{
+	
+	if (val < 0 || val > MAX_FILT_INT_MS)
+	{
+
+		return ERROR ;
+	}
+	uint16_t val16 = (uint16_t)val;
+	uint8_t buf[2];
+	memcpy(buf, &val16, 2);
+	if (OK
+		!= i2cMem8Write(dev,
+			I2C_MEM_OPTO_FILTRED_INT_MS , buf,
+			2))
 	{
 		return ERROR ;
 	}
@@ -752,3 +794,63 @@ int doOptoPWMRead(int argc, char *argv[])
 	return OK ;
 }
 
+const CliCmdType CMD_OPTO_FILT_INT_READ =
+{
+	"optfiltrd",
+	2,
+	&doOptoFiltIntRead,
+	"  optfiltrd         Read opto inputs inputs filtered interval in ms\n",
+	"  Usage:           "PROGRAM_NAME" <id> optfiltrd \n",
+	"  Example:         "PROGRAM_NAME" 0 optfiltrd ; Read the filtered interval of the signal applied to all opto input  on Board #0\n"
+};
+int doOptoFiltIntRead(int argc, char *argv[])
+{
+	if (argc != 3)
+	{
+		return ARG_CNT_ERR;
+	}
+	int dev = doBoardInit(atoi(argv[1]));
+	if (dev <= 0)
+	{
+		return ERROR ;
+	}
+	
+	uint16_t val = 0;
+	if (OK != optoFiltIntGet(dev, &val))
+	{
+		printf("Fail to read!\n");
+		return ERROR ;
+	}
+	printf("%d ms\n", (int)val);
+	return OK ;
+}
+
+const CliCmdType CMD_OPTO_FILT_INT_WRITE =
+{
+	"optfiltwr",
+	2,
+	&doOptoFiltIntWrite,
+	"  optfiltwr         Set opto inputs inputs filtered interval in  [0..10000], set to zero if you wish to disable the filter\n",
+	"  Usage:           "PROGRAM_NAME" <id> optfiltwr <interval_ms>\n",
+	"  Example:         "PROGRAM_NAME" 0 optfiltwr 100; Set the filtered interval of the signal applied to all opto input  on Board #0 to 100 ms\n"
+};
+int doOptoFiltIntWrite(int argc, char *argv[])
+{
+	if (argc != 4)
+	{
+		return ARG_CNT_ERR;
+	}
+	int dev = doBoardInit(atoi(argv[1]));
+	if (dev <= 0)
+	{
+		return ERROR ;
+	}
+	int val = atoi(argv[3]);
+	
+	if (OK != optoFiltIntSet(dev, val))
+	{
+		printf("Fail to write!\n");
+		return ERROR ;
+	}
+	return OK ;
+}
